@@ -1,0 +1,29 @@
+FROM node:21
+
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
+COPY . .
+
+EXPOSE 80
+RUN npx tsc
+
+
+CMD [ "NODE_OPTIONS='--max_old_space_size=16384" ]
+CMD [ "tsc" ]
+CMD ["npx vite build"]
+
+
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 8080
+
+CMD [ "npm", "run", "dev" ]
